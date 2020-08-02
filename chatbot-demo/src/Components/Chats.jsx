@@ -1,21 +1,23 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import { Chat } from './index';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    maxWidth: '36ch',
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
+const useStyles = makeStyles(() => (
+  createStyles({
+    "chats": {
+      height: 400, // c-box_height (592) - c-grid__answer_height (192)
+      padding: 0,
+      overflow: "auto", // height 以上の要素が出たときにスクロールバーを出現させる
+    }
+  })
+));
 
 const Chats = (props) => {
   const classes = useStyles();
 
   return (
-    <List className={classes.root}>
+    <List className={classes.chats}>
       {props.chats.map((value, index) => {
          return <Chat text={value.text} type={value.type} key={index.toString()} />
       })}
