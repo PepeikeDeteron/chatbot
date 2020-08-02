@@ -6,7 +6,7 @@ import { Chat } from './index';
 const useStyles = makeStyles(() => (
   createStyles({
     "chats": {
-      height: 400, // c-box_height (592) - c-grid__answer_height (192)
+      height: 400,
       padding: 0,
       overflow: "auto", // height 以上の要素が出たときにスクロールバーを出現させる
     }

@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => (
       color: "#FFB549",
       fontWeight: 600,
       marginBottom: "8px",
-      "&:hover": { // ホバーした時
+      "&:hover": {
         backgroundColor: "#FFB549",
         color: "#fff",
       }
