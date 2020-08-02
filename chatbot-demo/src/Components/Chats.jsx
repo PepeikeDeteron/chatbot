@@ -17,7 +17,7 @@ const Chats = (props) => {
   const classes = useStyles();
 
   return (
-    <List className={classes.chats}>
+    <List className={classes.chats} id={'scroll-area'}>
       {props.chats.map((value, index) => {
          return <Chat text={value.text} type={value.type} key={index.toString()} />
       })}

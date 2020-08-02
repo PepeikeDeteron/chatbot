@@ -56,6 +56,14 @@ export default class App extends React.Component {
     this.selectAnswer(initAnswer, this.state.currentId);
   }
 
+  // 最新のチャットが見えるようにスクロール位置の頂点をスクロール領域の最下部に設定
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const scrollArea = document.getElementById('scroll-area')
+    if (scrollArea) {
+      scrollArea.scrollTop = scrollArea.scrollHeight;
+    }
+  }
+
   render() {
     return (
       <section className="c-section">
