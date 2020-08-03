@@ -16,12 +16,12 @@ export const addDataset = functions.https.onRequest(async (req: any, res: any) =
     if (req.method !== 'POST') { // データを追加する際は POST メソッドで API を叩く
         sendResponse(res, 405, {error: 'Invalid Request'});
     } else {
-        const dataset = req.body
+        const dataset = req.body;
         // JSON 形式の dataset はオブジェクト型なので Object.keys で dataset の key を取りだし key の配列をループで回す
         for (const key of Object.keys(dataset)) {
             const data = dataset[key];
             await db.collection('questions').doc(key).set(data); // await -> 非同期処理を逐次実行
         }
-        sendResponse(res, 200, {massage: 'Successfully added dataset'})
+        sendResponse(res, 200, {message: 'Successfully added dataset'});
     }
 });
