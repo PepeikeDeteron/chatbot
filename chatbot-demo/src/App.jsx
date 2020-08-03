@@ -1,8 +1,8 @@
 import React from 'react';
-import defaultDataset from './dataset';
 import './assets/styles/style.css';
 import { AnswersList, Chats } from './Components/index';
 import FormDialog from './Components/Forms/FormDialog';
+import { db } from './Firebase/index';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -11,7 +11,8 @@ export default class App extends React.Component {
       answers: [], // 回答コンポーネントに表示するデータ
       chats: [], // チャットコンポーネントに表示するデータ
       currentId: 'init', // 現在の質問 ID
-      dataset: defaultDataset, // 質問と回答のデータセット
+      // Firestore から取ってくるので空のオブジェクトにする
+      dataset: {}, // 質問と回答のデータセット
       open: false // 問い合わせフォーム用モーダルの開閉を管理
     };
     this.selectAnswer = this.selectAnswer.bind(this);
@@ -80,9 +81,30 @@ export default class App extends React.Component {
     });
   };
 
+  initDataset = (dataset) => {
+    this.setState({
+      dataset: dataset
+    })
+  };
+
   componentDidMount() {
-    const initAnswer = "";
-    this.selectAnswer(initAnswer, this.state.currentId);
+    (async() => {
+      const dataset = this.state.dataset;
+
+      // questions という collection に入っていたドキュメントを全て取得
+      await db.collection('questions').get().then((snapshots) => {
+        snapshots.forEach(doc => {
+          const id = doc.id // questions 内の automation_tool など
+          const data = doc.data() // id の中身
+          dataset[id] = data // dataset というオブジェクトの中に id を key として value である data を追加
+        });
+      });
+
+      // 取得してきたデータを dataset に入れて state を更新
+      this.initDataset(dataset);
+      const initAnswer = "";
+      this.selectAnswer(initAnswer, this.state.currentId);
+    })();
   }
 
   // 最新のチャットが見えるようにスクロール位置の頂点をスクロール領域の最下部に設定
