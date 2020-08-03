@@ -11,9 +11,9 @@ export default class FormDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      email: "",
-      description: "",
+      name: '',
+      email: '',
+      description: '',
     }
 
     this.inputName = this.inputName.bind(this);
@@ -34,6 +34,35 @@ export default class FormDialog extends React.Component {
   inputDescription = (event) => {
     this.setState({
       description: event.target.value
+    });
+  };
+
+  submitForm = () => {
+    const name = this.state.name;
+    const email = this.state.email;
+    const description = this.state.description;
+
+    // Slack の Webhook URL を取得
+    const payload = {
+      text: 'お問い合わせがありました\n' +
+            'お名前：' + name + '\n' +
+            'Email：' + email + '\n' +
+            'お問い合わせ内容：\n' + description
+    };
+
+    const url = 'https://hooks.slack.com/services/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';
+
+    fetch(url,{
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }).then(() => {
+      alert('送信が完了しました。')
+      this.setState({
+        name: '',
+        email: '',
+        description: '',
+      });
+      return this.props.handleClose()
     });
   };
 
@@ -76,7 +105,7 @@ export default class FormDialog extends React.Component {
           <Button onClick={this.props.handleClose} color="primary">
             キャンセル
           </Button>
-          <Button onClick={this.props.handleClose} color="primary" autoFocus>
+          <Button onClick={this.submitForm} color="primary" autoFocus>
             送信
           </Button>
         </DialogActions>
