@@ -74,10 +74,10 @@ export default class FormDialog extends React.Component {
         </DialogContent>
         <DialogActions>
           <Button onClick={this.props.handleClose} color="primary">
-            Disagree
+            キャンセル
           </Button>
           <Button onClick={this.props.handleClose} color="primary" autoFocus>
-            Agree
+            送信
           </Button>
         </DialogActions>
       </Dialog>
