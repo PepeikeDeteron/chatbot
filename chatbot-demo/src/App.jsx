@@ -2,6 +2,7 @@ import React from 'react';
 import defaultDataset from './dataset';
 import './assets/styles/style.css';
 import { AnswersList, Chats } from './Components/index';
+import FormDialog from './Components/Forms/FormDialog';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -14,6 +15,8 @@ export default class App extends React.Component {
       open: false // 問い合わせフォーム用モーダルの開閉を管理
     };
     this.selectAnswer = this.selectAnswer.bind(this);
+    this.handleClickOpen = this.handleClickOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   displayNextQuestion = (nextQuestionId) => {
@@ -31,18 +34,23 @@ export default class App extends React.Component {
   };
 
   selectAnswer = (selectedAnswer, nextQuestionId) => {
-    switch(true) {
-      case(nextQuestionId === 'init'):
+    switch (true) {
+      case (nextQuestionId === 'init'):
         setTimeout(() => this.displayNextQuestion(nextQuestionId), 500);
         break;
 
+      case (nextQuestionId === 'contact'):
+        this.handleClickOpen();
+        break;
+
       // nextQuestionId の先頭が https から始まる(それ以降は任意の文字列)場合
-      case(/^https:*/.test(nextQuestionId)):
+      case (/^https:*/.test(nextQuestionId)):
         const a = document.createElement('a');
         a.href = nextQuestionId;
         a.target = '_blank'; // ブラウザの別タブでリンクを開く
         a.click();
         break;
+
       default:
         const chats = this.state.chats;
         chats.push({ // 更新していくために現在の状態をプッシュする
@@ -58,6 +66,18 @@ export default class App extends React.Component {
         setTimeout(() => this.displayNextQuestion(nextQuestionId), 1000);
         break;
     }
+  };
+
+  handleClickOpen = () => {
+    this.setState({
+      open: true,
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      open: false,
+    });
   };
 
   componentDidMount() {
@@ -82,6 +102,7 @@ export default class App extends React.Component {
             answers={this.state.answers}
             select={this.selectAnswer}
           />
+          <FormDialog open={this.state.open} handleClose={this.handleClose} />
         </div>
       </section>
     );
